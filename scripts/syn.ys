@@ -1,0 +1,17 @@
+read_verilog -sv ${files}
+read_liberty -lib ${techlib}
+hierarchy -check -top ${top}
+flatten
+
+proc; opt
+memory; opt
+fsm; opt
+techmap; opt
+
+dfflibmap -liberty ${techlib}
+abc -liberty ${techlib}
+stat -liberty ${techlib}
+
+autoname
+techmap -map scripts/dff_unmap.v
+ltp -noff
