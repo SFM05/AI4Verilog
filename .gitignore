@@ -5,7 +5,6 @@ Dockerfile.old
 bench/
 runs/
 test/
-skills/
 env.sh
 bench.json
 

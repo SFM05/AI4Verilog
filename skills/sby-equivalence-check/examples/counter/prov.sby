@@ -1,0 +1,23 @@
+[options]
+mode prove
+depth 8
+
+[autotune]
+timeout 60
+
+[engines]
+smtbmc z3
+
+[script]
+read_verilog -sv gold.v
+rename counter gold
+read_verilog -sv gate.v
+rename counter gate
+
+read_verilog -sv miter.sv
+prep -top miter
+
+[files]
+gate.v gate/counter.v
+gold.v gold/counter.v
+miter.sv

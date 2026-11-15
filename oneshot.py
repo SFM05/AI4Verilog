@@ -1,6 +1,7 @@
 import json
 import argparse
 import logging
+import os
 
 from eval import eval_loop
 from exec import exec_loop
@@ -18,6 +19,8 @@ def exec_tasks(
     tasks: dict,
     workDir: str,
     model: str,
+    promptPath: str,
+    agent: str,
     epochs: int,
     start_epoch: int = 0,
     start_task: int = 0
@@ -29,9 +32,9 @@ def exec_tasks(
         result = exec_loop(
             tasks=tasks,
             workDir=f'{workDir}/epoch{i}',
-            promptPath='prompt/oneshot.md',
+            promptPath=promptPath,
             model=model,
-            agent='oneshot',
+            agent=agent,
             start=start_task
         )
         exec_result.append(result)
@@ -68,10 +71,12 @@ if __name__ == '__main__':
                         help='Description file `task.json`')
     parser.add_argument('--run', '-r', type=str,
                         help='Experiment name')
-    parser.add_argument('--model', '-m', type=str,
+    parser.add_argument('--model', '-m', type=str, nargs='*',
                         help='Model, in the format provider/model#variant')
-    parser.add_argument('--techlib', type=str,
-                        help='Techlib used for synthesis')
+    parser.add_argument('--prompt', type=str, nargs='*',
+                        help='prompt path')
+    parser.add_argument('--agent', type=str, nargs='*',
+                        help='Agent used')
     parser.add_argument('--epoch', type=int, default=1,
                         help='Epochs to run')
     parser.add_argument('--start', nargs=2, type=int, default=[0, 0],
@@ -83,13 +88,23 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    techlib = args.techlib
     runName = args.run
     is_eval = args.eval
     is_exec = args.exec
     model = args.model
+    prompt = args.prompt
+    agent = args.agent
     epochs = args.epoch
     start = args.start
+
+    if is_exec:
+        assert (model is not None)
+        assert (prompt is not None)
+        assert (agent is not None)
+
+    techlib = os.getenv('TECHLIB')
+    if techlib is None:
+        raise ("Techlib is not in the environment.")
 
     tasks: list
     with open(args.task, 'r', encoding='utf-8') as f:
@@ -100,6 +115,8 @@ if __name__ == '__main__':
             tasks=tasks,
             workDir=f'runs/{runName}',
             model=model,
+            promptPath=prompt,
+            agent=agent,
             epochs=epochs,
             start_epoch=start[0],
             start_task=start[1]

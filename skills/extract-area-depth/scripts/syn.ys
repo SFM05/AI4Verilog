@@ -1,0 +1,21 @@
+read_verilog -sv ${files}
+read_liberty -lib ${techlib}
+hierarchy -check -top ${top}
+${param_section}
+flatten
+
+proc; opt
+memory; opt
+fsm; opt
+techmap; opt
+
+dfflibmap -liberty ${techlib}
+abc -liberty ${techlib}
+tee -o ${outdir}/area.log stat -liberty ${techlib}
+
+autoname
+techmap -map script/dff_unmap.v
+tee -o ${outdir}/depth.log ltp -noff
+
+write_verilog -sv -norename -attr2comment -noexpr -simple-lhs ${outdir}/syn.sv
+
