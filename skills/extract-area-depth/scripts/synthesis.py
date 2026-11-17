@@ -4,12 +4,13 @@ from string import Template
 import os
 import shutil
 import re
+from pathlib import Path
 
 
-def excute_ys(scriptPath, files, top, techlib, outDir, params):
+def excute_ys(root, files, top, techlib, outDir, params):
     files = ' '.join(files)
 
-    with open(scriptPath, 'r', encoding='utf-8') as f:
+    with open(f'{root}/syn.ys', 'r', encoding='utf-8') as f:
         script = f.read()
 
     if params is None:
@@ -26,6 +27,7 @@ def excute_ys(scriptPath, files, top, techlib, outDir, params):
          'top': top,
          'techlib': techlib,
          'outdir': outDir,
+         'root': root,
          'param_section': param_section}
     )
 
@@ -65,8 +67,9 @@ if __name__ == '__main__':
         shutil.rmtree(outputDir)
     os.makedirs(outputDir)
 
+    SCRIPT_DIR = Path(__file__).resolve().parent
     result = excute_ys(
-        'script/syn.ys',
+        SCRIPT_DIR,
         files,
         top,
         techlib,

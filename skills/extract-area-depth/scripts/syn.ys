@@ -5,17 +5,26 @@ ${param_section}
 flatten
 
 proc; opt
-memory; opt
+autoname
+write_verilog -sv -norename -attr2comment -simple-lhs ${outdir}/01_proc.sv
+
 fsm; opt
+autoname
+write_verilog -sv -norename -attr2comment -simple-lhs ${outdir}/02_fsm.sv
+
+memory; opt
+autoname
+write_verilog -sv -norename -attr2comment -simple-lhs ${outdir}/03_memory.sv
+
 techmap; opt
+autoname
+write_verilog -sv -norename -attr2comment -simple-lhs ${outdir}/04_techmap.sv
 
 dfflibmap -liberty ${techlib}
 abc -liberty ${techlib}
 tee -o ${outdir}/area.log stat -liberty ${techlib}
+write_verilog -sv -norename -attr2comment -simple-lhs ${outdir}/05_abc.sv
 
 autoname
-techmap -map script/dff_unmap.v
+techmap -map ${root}/dff_unmap.v
 tee -o ${outdir}/depth.log ltp -noff
-
-write_verilog -sv -norename -attr2comment -noexpr -simple-lhs ${outdir}/syn.sv
-
