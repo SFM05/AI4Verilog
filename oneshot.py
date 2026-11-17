@@ -71,11 +71,11 @@ if __name__ == '__main__':
                         help='Description file `task.json`')
     parser.add_argument('--run', '-r', type=str,
                         help='Experiment name')
-    parser.add_argument('--model', '-m', type=str, nargs='*',
+    parser.add_argument('--model', '-m', type=str, nargs='?',
                         help='Model, in the format provider/model#variant')
-    parser.add_argument('--prompt', type=str, nargs='*',
+    parser.add_argument('--prompt', type=str, nargs='?',
                         help='prompt path')
-    parser.add_argument('--agent', type=str, nargs='*',
+    parser.add_argument('--agent', type=str, nargs='?',
                         help='Agent used')
     parser.add_argument('--epoch', type=int, default=1,
                         help='Epochs to run')
