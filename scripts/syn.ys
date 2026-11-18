@@ -4,8 +4,8 @@ hierarchy -check -top ${top}
 flatten
 
 proc; opt
-memory; opt
 fsm; opt
+memory; opt
 techmap; opt
 
 dfflibmap -liberty ${techlib}
