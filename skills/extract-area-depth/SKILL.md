@@ -28,6 +28,8 @@ description: 使用Yosys提取Verilog工程综合后的面积与逻辑深度
 | 3 | memory  | `03_memory.sv`  |
 | 4 | techmap | `04_techmap.sv` |
 | 5 | abc     | `05_abc.sv`     |
+| 6 | unmap   | `06_unmap.sv`   |
+unmap之后的逻辑对齐了逻辑深度，但所有的反相输出都被映射到了同相输出。
 
 ## 异常分析
 当发生异常时，脚本会在控制台输出提示，并最后输出`Synthesis FAIL`。接下来需要在输出的`syn.log`中查找异常具体发生在哪个阶段。
